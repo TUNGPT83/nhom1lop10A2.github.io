@@ -308,6 +308,117 @@
       }
     }
 
+    /* CSS cho phần bài tập */
+    .exercises-section {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 30px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .exercises-section h2 {
+      color: #667eea;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      text-align: center;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .exercise {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border-left: 5px solid #667eea;
+    }
+
+    .exercise-title {
+      color: #764ba2;
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .exercise-problem {
+      background: #fff3cd;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border-left: 4px solid #ffc107;
+    }
+
+    .exercise-problem strong {
+      color: #856404;
+    }
+
+    .exercise-solution {
+      margin-top: 15px;
+    }
+
+    .solution-step {
+      margin-bottom: 12px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .solution-step::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .chemical-equation {
+      background: #e7f3ff;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      margin: 10px 0;
+      border-left: 3px solid #2196F3;
+      overflow-x: auto;
+    }
+
+    .calculation {
+      background: #f0f0f0;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      margin: 8px 0;
+      display: inline-block;
+    }
+
+    .result {
+      background: #d4edda;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+      border-left: 4px solid #28a745;
+      font-weight: bold;
+      color: #155724;
+    }
+
+    @media (max-width: 768px) {
+      .exercises-section {
+        padding: 15px;
+        margin-top: 20px;
+      }
+
+      .exercises-section h2 {
+        font-size: 1.4em;
+      }
+
+      .exercise-title {
+        font-size: 1.1em;
+      }
+
+      .exercise {
+        padding: 15px;
+      }
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -460,7 +571,7 @@
  <body>
   <main class="container">
    <header>
-    <h1 id="main-title">Bảng Tuần Hoàn Nguyên Tố Hóa Học (Nhóm 1 - Lớp 10A2)</h1>
+    <h1 id="main-title">Bảng Tuần Hoàn Nguyên Tố Hóa Học</h1>
     <p class="subtitle" id="subtitle">Nhấp vào nguyên tố để xem thông tin chi tiết</p>
    </header>
    <div class="periodic-table" id="periodic-table"></div>
@@ -493,6 +604,125 @@
      <div class="legend-color" style="background: linear-gradient(135deg, #fdcfdf 0%, #f8a5c2 100%);"></div><span>Actinide</span>
     </div>
    </div>
+
+   <!-- Phần bài tập hóa học -->
+   <div class="exercises-section">
+    <h2>BÀI TẬP HÓA HỌC</h2>
+
+    <!-- Bài tập 1 -->
+    <div class="exercise">
+     <div class="exercise-title">Bài 1: Tính thể tích khí NO₂ sinh ra</div>
+     <div class="exercise-problem">
+      <strong>Đề bài:</strong> Hoà tan 13,1g PbO bằng HNO₃ dư. Tính V khí NO₂ (đktc)
+     </div>
+     <div class="exercise-solution">
+      <div class="solution-step">
+       <strong>PTHH:</strong>
+       <div class="chemical-equation">
+        2PbO + 4HNO₃ → 2Pb(NO₃)₂ + 2NO₂ + 2H₂O
+       </div>
+      </div>
+      <div class="solution-step">
+       <strong>Tính số mol PbO:</strong>
+       <div class="calculation">
+        n<sub>PbO</sub> = 13,1/223,2 ≈ 0,0587 mol
+       </div>
+      </div>
+      <div class="solution-step">
+       <strong>Theo phương trình:</strong>
+       <div class="calculation">
+        n<sub>NO₂</sub> = n<sub>PbO</sub> = 0,0587 mol
+       </div>
+      </div>
+      <div class="solution-step">
+       <strong>Tính thể tích khí:</strong>
+       <div class="calculation">
+        V = n × 22,4 = 0,0587 × 22,4 ≈ 1,31 (L)
+       </div>
+      </div>
+      <div class="result">
+       ✓ Đáp án: V<sub>NO₂</sub> = 1,31 lít
+      </div>
+     </div>
+    </div>
+
+    <!-- Bài tập 2 -->
+    <div class="exercise">
+     <div class="exercise-title">Bài 2: Tính khối lượng Na₂CO₃ cần dùng</div>
+     <div class="exercise-problem">
+      <strong>Đề bài:</strong> Tính khối lượng Na₂CO₃ cần dùng để sản xuất được 120 kg thủy tinh Na₂O.CaO.6SiO₂ với hiệu suất 90%?
+     </div>
+     <div class="exercise-solution">
+      <div class="solution-step">
+       <strong>PTHH:</strong>
+       <div class="chemical-equation">
+        6SiO₂ + CaCO₃ + Na₂CO₃ → Na₂O.CaO.6SiO₂ + 2CO₂
+       </div>
+      </div>
+      <div class="solution-step">
+       <strong>Theo phương trình:</strong>
+       <div class="calculation">
+        106 gam Na₂CO₃ → 478 g thủy tinh
+       </div>
+      </div>
+      <div class="solution-step">
+       <strong>Tính khối lượng lý thuyết:</strong>
+       <div class="calculation">
+        m<sub>Na₂CO₃ (lý thuyết)</sub> = (106 × 120)/478 = 26,611 kg
+       </div>
+      </div>
+      <div class="solution-step">
+       <strong>Tính khối lượng thực tế (H = 90%):</strong>
+       <div class="calculation">
+        m<sub>Na₂CO₃ (thực tế)</sub> = 26,611 × 100%/90% = 29,57 kg
+       </div>
+      </div>
+      <div class="result">
+       ✓ Đáp án: Cần 29,57 kg Na₂CO₃
+      </div>
+     </div>
+    </div>
+
+    <!-- Bài tập 3 -->
+    <div class="exercise">
+     <div class="exercise-title">Bài 3: Tác dụng với dung dịch acid</div>
+     <div class="exercise-problem">
+      <strong>Đề bài:</strong> Cho 10,8g Al tác dụng hết với dung dịch HCl dư. Tính thể tích khí hydro thu được ở điều kiện tiêu chuẩn.
+     </div>
+     <div class="exercise-solution">
+      <div class="solution-step">
+       <strong>Bước 1: Viết phương trình hóa học</strong>
+       <div class="chemical-equation">
+        2Al + 6HCl → 2AlCl₃ + 3H₂
+       </div>
+      </div>
+      <div class="solution-step">
+       <strong>Bước 2: Tính số mol Al</strong>
+       <div class="calculation">
+        n<sub>Al</sub> = m<sub>Al</sub>/M<sub>Al</sub> = 10,8/27 = 0,4 mol
+       </div>
+      </div>
+      <div class="solution-step">
+       <strong>Bước 3: Tính số mol khí hydro</strong>
+       <div>Theo phương trình:</div>
+       <div class="calculation">
+        n<sub>H₂</sub> = (3/2) × n<sub>Al</sub> = (3/2) × 0,4 = 0,6 mol
+       </div>
+      </div>
+      <div class="solution-step">
+       <strong>Bước 4: Tính thể tích khí hydro</strong>
+       <div class="calculation">
+        V<sub>H₂</sub> = 0,6 × 22,4 = 13,44 (L)
+       </div>
+      </div>
+      <div class="result">
+       ✓ Đáp án: V<sub>H₂</sub> = 13,44 lít
+      </div>
+     </div>
+    </div>
+
+   </div>
+
   </main>
   <div class="modal" id="modal">
    <div class="modal-content"><button class="close-btn" id="close-btn">×</button>
