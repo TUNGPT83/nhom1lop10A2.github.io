@@ -1,0 +1,910 @@
+<!doctype html>
+<html lang="vi">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Bảng Tuần Hoàn Hóa Học</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 100%;
+      padding: 10px;
+      max-width: 1400px;
+      margin: 0 auto;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      margin: 0 0 10px 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+      font-size: 1.1em;
+      opacity: 0.95;
+    }
+
+    .periodic-table {
+      display: grid;
+      grid-template-columns: repeat(18, minmax(40px, 1fr));
+      grid-template-rows: repeat(7, minmax(40px, 1fr)) 20px repeat(2, minmax(40px, 1fr));
+      gap: 4px;
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      width: max-content;
+      max-width: 100%;
+    }
+
+    .element {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 8px 4px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .element:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      z-index: 10;
+    }
+
+    .element.nonmetal {
+      background: #90EE90;
+      border-color: #6bb896;
+    }
+
+    .element.noble-gas {
+      background: #FFB6C1;
+      border-color: #ff8b94;
+    }
+
+    .element.alkali {
+      background: #FFE4B5;
+      border-color: #ff6b7a;
+    }
+
+    .element.alkaline {
+      background: #FFE4B5;
+      border-color: #aed581;
+    }
+
+    .element.transition {
+      background: #FFEC8B;
+      border-color: #ffa059;
+    }
+
+    .element.post-transition {
+      background: #FFEC8B;
+      border-color: #5a9fd4;
+    }
+
+    .element.metalloid {
+      background: #90EE90;
+      border-color: #8b5cf6;
+    }
+
+    .element.lanthanide {
+      background: #FFB6C1;
+      border-color: #e879b9;
+    }
+
+    .element.actinide {
+      background: #FFB6C1;
+      border-color: #f48fb1;
+    }
+
+    .atomic-number {
+      font-size: 0.5em;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .symbol {
+      font-size: 1em;
+      font-weight: bold;
+      color: #222;
+      margin: 2px 0;
+    }
+
+    .name {
+      font-size: 0.45em;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .empty {
+      background: transparent;
+      border: none;
+      cursor: default;
+    }
+
+    .empty:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .series-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      font-weight: bold;
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 4px;
+    }
+
+    .series-placeholder {
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px dashed #999;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #333;
+      cursor: default;
+    }
+
+    .series-placeholder:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Responsive cho mobile */
+    @media (max-width: 768px) {
+      .container {
+        padding: 5px;
+      }
+
+      h1 {
+        font-size: 1.2em;
+        margin: 0 0 5px 0;
+      }
+
+      .subtitle {
+        font-size: 0.9em;
+      }
+
+      header {
+        margin-bottom: 15px;
+      }
+
+      .periodic-table {
+        padding: 8px;
+        min-width: 100%;
+        width: max-content;
+        gap: 2px;
+      }
+
+      .element {
+        padding: 4px 2px;
+        min-width: 45px;
+        min-height: 45px;
+      }
+
+      .atomic-number {
+        font-size: 0.4em;
+      }
+
+      .symbol {
+        font-size: 0.85em;
+      }
+
+      .name {
+        font-size: 0.35em;
+      }
+
+      .series-label {
+        font-size: 0.6em;
+        padding: 2px;
+      }
+
+      .series-placeholder {
+        font-size: 0.9em;
+        min-width: 45px;
+        min-height: 45px;
+      }
+
+      .modal {
+        padding: 10px;
+      }
+
+      .modal-content {
+        padding: 15px;
+        max-height: 85vh;
+      }
+
+      .modal-symbol {
+        font-size: 2.5em;
+      }
+
+      .modal-name {
+        font-size: 16px;
+      }
+
+      .modal-atomic {
+        font-size: 12px;
+      }
+
+      .info-label {
+        font-size: 10px;
+      }
+
+      .info-value {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1em;
+      }
+
+      .subtitle {
+        font-size: 0.75em;
+      }
+
+      .element {
+        min-width: 38px;
+        min-height: 38px;
+        padding: 3px 1px;
+      }
+
+      .atomic-number {
+        font-size: 0.35em;
+      }
+
+      .symbol {
+        font-size: 0.75em;
+      }
+
+      .name {
+        font-size: 0.3em;
+      }
+
+      .series-placeholder {
+        font-size: 0.8em;
+        min-width: 38px;
+        min-height: 38px;
+      }
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90%;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      font-size: 1.5em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background: #764ba2;
+      transform: rotate(90deg);
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #667eea;
+    }
+
+    .modal-symbol {
+      font-size: 4em;
+      font-weight: bold;
+      color: #667eea;
+      margin: 0;
+    }
+
+    .modal-name {
+      font-size: 1.8em;
+      color: #333;
+      margin: 10px 0 5px 0;
+    }
+
+    .modal-atomic {
+      font-size: 1.2em;
+      color: #666;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .info-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-label {
+      font-size: 0.85em;
+      color: #666;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .info-value {
+      font-size: 1.1em;
+      color: #222;
+      font-weight: bold;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.85em;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 2px solid rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 1200px) {
+      .periodic-table {
+        gap: 2px;
+        padding: 10px;
+      }
+
+      .symbol {
+        font-size: 1.2em;
+      }
+
+      .name {
+        font-size: 0.5em;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <main class="container">
+   <header>
+    <h1 id="main-title">Bảng Tuần Hoàn Nguyên Tố Hóa Học (Nhóm 1 - Lớp 10A2)</h1>
+    <p class="subtitle" id="subtitle">Nhấp vào nguyên tố để xem thông tin chi tiết</p>
+   </header>
+   <div class="periodic-table" id="periodic-table"></div>
+   <div class="legend">
+    <div class="legend-item">
+     <div class="legend-color" style="background: linear-gradient(135deg, #ffaaa5 0%, #ff8b94 100%);"></div><span>Kim loại kiềm</span>
+    </div>
+    <div class="legend-item">
+     <div class="legend-color" style="background: linear-gradient(135deg, #dcedc1 0%, #c5e1a5 100%);"></div><span>Kim loại kiềm thổ</span>
+    </div>
+    <div class="legend-item">
+     <div class="legend-color" style="background: linear-gradient(135deg, #ffd6a5 0%, #ffb87a 100%);"></div><span>Kim loại chuyển tiếp</span>
+    </div>
+    <div class="legend-item">
+     <div class="legend-color" style="background: linear-gradient(135deg, #a2d2ff 0%, #7db9e8 100%);"></div><span>Kim loại sau chuyển tiếp</span>
+    </div>
+    <div class="legend-item">
+     <div class="legend-color" style="background: linear-gradient(135deg, #c8b6ff 0%, #a78bfa 100%);"></div><span>Á kim</span>
+    </div>
+    <div class="legend-item">
+     <div class="legend-color" style="background: linear-gradient(135deg, #a8e6cf 0%, #88d4ab 100%);"></div><span>Phi kim</span>
+    </div>
+    <div class="legend-item">
+     <div class="legend-color" style="background: linear-gradient(135deg, #ffd3b6 0%, #ffaaa5 100%);"></div><span>Khí hiếm</span>
+    </div>
+    <div class="legend-item">
+     <div class="legend-color" style="background: linear-gradient(135deg, #ffc6ff 0%, #f5a3d0 100%);"></div><span>Lanthanide</span>
+    </div>
+    <div class="legend-item">
+     <div class="legend-color" style="background: linear-gradient(135deg, #fdcfdf 0%, #f8a5c2 100%);"></div><span>Actinide</span>
+    </div>
+   </div>
+  </main>
+  <div class="modal" id="modal">
+   <div class="modal-content"><button class="close-btn" id="close-btn">×</button>
+    <div class="modal-header">
+     <div class="modal-symbol" id="modal-symbol"></div>
+     <h2 class="modal-name" id="modal-name"></h2>
+     <p class="modal-atomic" id="modal-atomic"></p>
+    </div>
+    <div class="info-grid" id="info-grid"></div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: "Bảng Tuần Hoàn Nguyên Tố Hóa Học",
+      subtitle: "Nh���p vào nguyên tố để xem thông tin chi tiết",
+      primary_color: "#667eea",
+      secondary_color: "#764ba2",
+      background_color: "#ffffff",
+      text_color: "#222222",
+      accent_color: "#f8f9fa"
+    };
+
+    const elements = [
+      {number: 1, symbol: 'H', name: 'Hydrogen', mass: '1.008', category: 'nonmetal', group: 1, period: 1, electron: '1s¹', density: '0.089', melt: '-259.16', boil: '-252.87', discovered: '1766'},
+      {number: 2, symbol: 'He', name: 'Helium', mass: '4.0026', category: 'noble-gas', group: 18, period: 1, electron: '1s²', density: '0.178', melt: '-272.2', boil: '-268.93', discovered: '1895'},
+      {number: 3, symbol: 'Li', name: 'Litium', mass: '6.94', category: 'alkali', group: 1, period: 2, electron: '1s² 2s¹', density: '0.534', melt: '180.5', boil: '1342', discovered: '1817'},
+      {number: 4, symbol: 'Be', name: 'Berilium', mass: '9.0122', category: 'alkaline', group: 2, period: 2, electron: '1s² 2s²', density: '1.85', melt: '1287', boil: '2470', discovered: '1798'},
+      {number: 5, symbol: 'B', name: 'Boron', mass: '10.81', category: 'metalloid', group: 13, period: 2, electron: '1s² 2s² 2p¹', density: '2.34', melt: '2075', boil: '4000', discovered: '1808'},
+      {number: 6, symbol: 'C', name: 'Carbon', mass: '12.011', category: 'nonmetal', group: 14, period: 2, electron: '1s² 2s² 2p²', density: '2.267', melt: '3550', boil: '4027', discovered: 'Cổ đại'},
+      {number: 7, symbol: 'N', name: 'Nitrogen', mass: '14.007', category: 'nonmetal', group: 15, period: 2, electron: '1s² 2s² 2p³', density: '1.251', melt: '-210.1', boil: '-195.79', discovered: '1772'},
+      {number: 8, symbol: 'O', name: 'Oxygen', mass: '15.999', category: 'nonmetal', group: 16, period: 2, electron: '1s² 2s² 2p⁴', density: '1.429', melt: '-218.79', boil: '-182.95', discovered: '1774'},
+      {number: 9, symbol: 'F', name: 'Fluorine', mass: '18.998', category: 'nonmetal', group: 17, period: 2, electron: '1s² 2s² 2p⁵', density: '1.696', melt: '-219.67', boil: '-188.11', discovered: '1886'},
+      {number: 10, symbol: 'Ne', name: 'Neon', mass: '20.180', category: 'noble-gas', group: 18, period: 2, electron: '1s² 2s² 2p⁶', density: '0.900', melt: '-248.59', boil: '-246.08', discovered: '1898'},
+      {number: 11, symbol: 'Na', name: 'Sodium', mass: '22.990', category: 'alkali', group: 1, period: 3, electron: '1s² 2s² 2p⁶ 3s¹', density: '0.968', melt: '97.72', boil: '883', discovered: '1807'},
+      {number: 12, symbol: 'Mg', name: 'Magnesium', mass: '24.305', category: 'alkaline', group: 2, period: 3, electron: '1s² 2s² 2p⁶ 3s²', density: '1.738', melt: '650', boil: '1090', discovered: '1808'},
+      {number: 13, symbol: 'Al', name: 'Aluminium', mass: '26.982', category: 'post-transition', group: 13, period: 3, electron: '1s² 2s² 2p⁶ 3s² 3p¹', density: '2.70', melt: '660.32', boil: '2519', discovered: '1825'},
+      {number: 14, symbol: 'Si', name: 'Silicon', mass: '28.085', category: 'metalloid', group: 14, period: 3, electron: '1s² 2s² 2p⁶ 3s² 3p²', density: '2.330', melt: '1414', boil: '3265', discovered: '1824'},
+      {number: 15, symbol: 'P', name: 'Phosphorus', mass: '30.974', category: 'nonmetal', group: 15, period: 3, electron: '1s² 2s² 2p⁶ 3s² 3p³', density: '1.823', melt: '44.15', boil: '280.5', discovered: '1669'},
+      {number: 16, symbol: 'S', name: 'Sulfur', mass: '32.06', category: 'nonmetal', group: 16, period: 3, electron: '1s² 2s² 2p⁶ 3s² 3p⁴', density: '2.07', melt: '115.21', boil: '444.6', discovered: 'Cổ đại'},
+      {number: 17, symbol: 'Cl', name: 'Chlorine', mass: '35.45', category: 'nonmetal', group: 17, period: 3, electron: '1s² 2s² 2p⁶ 3s² 3p⁵', density: '3.214', melt: '-101.5', boil: '-34.04', discovered: '1774'},
+      {number: 18, symbol: 'Ar', name: 'Argon', mass: '39.948', category: 'noble-gas', group: 18, period: 3, electron: '1s² 2s² 2p⁶ 3s² 3p⁶', density: '1.784', melt: '-189.34', boil: '-185.85', discovered: '1894'},
+      {number: 19, symbol: 'K', name: 'Potassium', mass: '39.098', category: 'alkali', group: 1, period: 4, electron: '1s² 2s² 2p⁶ 3s² 3p⁶ 4s¹', density: '0.862', melt: '63.5', boil: '759', discovered: '1807'},
+      {number: 20, symbol: 'Ca', name: 'Calcium', mass: '40.078', category: 'alkaline', group: 2, period: 4, electron: '[Ar] 4s²', density: '1.550', melt: '842', boil: '1484', discovered: '1808'},
+      {number: 21, symbol: 'Sc', name: 'Scandium', mass: '44.956', category: 'transition', group: 3, period: 4, electron: '[Ar] 3d¹ 4s²', density: '2.985', melt: '1541', boil: '2836', discovered: '1879'},
+      {number: 22, symbol: 'Ti', name: 'Titanium', mass: '47.867', category: 'transition', group: 4, period: 4, electron: '[Ar] 3d² 4s²', density: '4.506', melt: '1668', boil: '3287', discovered: '1791'},
+      {number: 23, symbol: 'V', name: 'Vanadium', mass: '50.942', category: 'transition', group: 5, period: 4, electron: '[Ar] 3d³ 4s²', density: '6.11', melt: '1910', boil: '3407', discovered: '1801'},
+      {number: 24, symbol: 'Cr', name: 'Chromium', mass: '51.996', category: 'transition', group: 6, period: 4, electron: '[Ar] 3d⁵ 4s¹', density: '7.19', melt: '1907', boil: '2671', discovered: '1797'},
+      {number: 25, symbol: 'Mn', name: 'Manganese', mass: '54.938', category: 'transition', group: 7, period: 4, electron: '[Ar] 3d⁵ 4s²', density: '7.43', melt: '1246', boil: '2061', discovered: '1774'},
+      {number: 26, symbol: 'Fe', name: 'Iron', mass: '55.845', category: 'transition', group: 8, period: 4, electron: '[Ar] 3d⁶ 4s²', density: '7.874', melt: '1538', boil: '2862', discovered: 'Cổ đại'},
+      {number: 27, symbol: 'Co', name: 'Cobalt', mass: '58.933', category: 'transition', group: 9, period: 4, electron: '[Ar] 3d⁷ 4s²', density: '8.90', melt: '1495', boil: '2927', discovered: '1735'},
+      {number: 28, symbol: 'Ni', name: 'Nickel', mass: '58.693', category: 'transition', group: 10, period: 4, electron: '[Ar] 3d⁸ 4s²', density: '8.908', melt: '1455', boil: '2913', discovered: '1751'},
+      {number: 29, symbol: 'Cu', name: 'Copper', mass: '63.546', category: 'transition', group: 11, period: 4, electron: '[Ar] 3d¹⁰ 4s¹', density: '8.96', melt: '1084.62', boil: '2562', discovered: 'Cổ đại'},
+      {number: 30, symbol: 'Zn', name: 'Zinc', mass: '65.38', category: 'transition', group: 12, period: 4, electron: '[Ar] 3d¹⁰ 4s²', density: '7.134', melt: '419.53', boil: '907', discovered: '1746'},
+      {number: 31, symbol: 'Ga', name: 'Galium', mass: '69.723', category: 'post-transition', group: 13, period: 4, electron: '[Ar] 3d¹⁰ 4s² 4p¹', density: '5.904', melt: '29.76', boil: '2204', discovered: '1875'},
+      {number: 32, symbol: 'Ge', name: 'Germanium', mass: '72.630', category: 'metalloid', group: 14, period: 4, electron: '[Ar] 3d¹⁰ 4s² 4p²', density: '5.323', melt: '938.25', boil: '2833', discovered: '1886'},
+      {number: 33, symbol: 'As', name: 'Arsenic', mass: '74.922', category: 'metalloid', group: 15, period: 4, electron: '[Ar] 3d¹⁰ 4s² 4p³', density: '5.727', melt: '817', boil: '614', discovered: 'Cổ đại'},
+      {number: 34, symbol: 'Se', name: 'Selenium', mass: '78.971', category: 'nonmetal', group: 16, period: 4, electron: '[Ar] 3d¹⁰ 4s² 4p⁴', density: '4.809', melt: '221', boil: '685', discovered: '1817'},
+      {number: 35, symbol: 'Br', name: 'Bromine', mass: '79.904', category: 'nonmetal', group: 17, period: 4, electron: '[Ar] 3d¹⁰ 4s² 4p⁵', density: '3.122', melt: '-7.2', boil: '58.8', discovered: '1826'},
+      {number: 36, symbol: 'Kr', name: 'Krypton', mass: '83.798', category: 'noble-gas', group: 18, period: 4, electron: '[Ar] 3d¹⁰ 4s² 4p⁶', density: '3.749', melt: '-157.36', boil: '-153.22', discovered: '1898'},
+      {number: 37, symbol: 'Rb', name: 'Rubidium', mass: '85.468', category: 'alkali', group: 1, period: 5, electron: '[Kr] 5s¹', density: '1.532', melt: '39.31', boil: '688', discovered: '1861'},
+      {number: 38, symbol: 'Sr', name: 'Strontium', mass: '87.62', category: 'alkaline', group: 2, period: 5, electron: '[Kr] 5s²', density: '2.64', melt: '777', boil: '1382', discovered: '1790'},
+      {number: 39, symbol: 'Y', name: 'Yttrium', mass: '88.906', category: 'transition', group: 3, period: 5, electron: '[Kr] 4d¹ 5s²', density: '4.472', melt: '1526', boil: '3345', discovered: '1794'},
+      {number: 40, symbol: 'Zr', name: 'Zirconium', mass: '91.224', category: 'transition', group: 4, period: 5, electron: '[Kr] 4d² 5s²', density: '6.506', melt: '1855', boil: '4409', discovered: '1789'},
+      {number: 41, symbol: 'Nb', name: 'Niobium', mass: '92.906', category: 'transition', group: 5, period: 5, electron: '[Kr] 4d⁴ 5s¹', density: '8.57', melt: '2477', boil: '4744', discovered: '1801'},
+      {number: 42, symbol: 'Mo', name: 'Molybdenum', mass: '95.95', category: 'transition', group: 6, period: 5, electron: '[Kr] 4d⁵ 5s¹', density: '10.28', melt: '2623', boil: '4639', discovered: '1781'},
+      {number: 43, symbol: 'Tc', name: 'Tecnetium', mass: '[98]', category: 'transition', group: 7, period: 5, electron: '[Kr] 4d⁵ 5s²', density: '11.5', melt: '2157', boil: '4265', discovered: '1937'},
+      {number: 44, symbol: 'Ru', name: 'Ruthenium', mass: '101.07', category: 'transition', group: 8, period: 5, electron: '[Kr] 4d⁷ 5s¹', density: '12.37', melt: '2334', boil: '4150', discovered: '1844'},
+      {number: 45, symbol: 'Rh', name: 'Rhodium', mass: '102.91', category: 'transition', group: 9, period: 5, electron: '[Kr] 4d⁸ 5s¹', density: '12.41', melt: '1964', boil: '3695', discovered: '1803'},
+      {number: 46, symbol: 'Pd', name: 'Palladium', mass: '106.42', category: 'transition', group: 10, period: 5, electron: '[Kr] 4d¹⁰', density: '12.023', melt: '1554.9', boil: '2963', discovered: '1803'},
+      {number: 47, symbol: 'Ag', name: 'Silver', mass: '107.87', category: 'transition', group: 11, period: 5, electron: '[Kr] 4d¹⁰ 5s¹', density: '10.49', melt: '961.78', boil: '2162', discovered: 'Cổ đại'},
+      {number: 48, symbol: 'Cd', name: 'Cadmium', mass: '112.41', category: 'transition', group: 12, period: 5, electron: '[Kr] 4d¹⁰ 5s²', density: '8.65', melt: '321.07', boil: '767', discovered: '1817'},
+      {number: 49, symbol: 'In', name: 'Indium', mass: '114.82', category: 'post-transition', group: 13, period: 5, electron: '[Kr] 4d¹⁰ 5s² 5p¹', density: '7.31', melt: '156.6', boil: '2072', discovered: '1863'},
+      {number: 50, symbol: 'Sn', name: 'Tin', mass: '118.71', category: 'post-transition', group: 14, period: 5, electron: '[Kr] 4d¹⁰ 5s² 5p²', density: '7.287', melt: '231.93', boil: '2602', discovered: 'Cổ đại'},
+      {number: 51, symbol: 'Sb', name: 'Antimony', mass: '121.76', category: 'metalloid', group: 15, period: 5, electron: '[Kr] 4d¹⁰ 5s² 5p³', density: '6.697', melt: '630.63', boil: '1587', discovered: 'Cổ đại'},
+      {number: 52, symbol: 'Te', name: 'Tellurium', mass: '127.60', category: 'metalloid', group: 16, period: 5, electron: '[Kr] 4d¹⁰ 5s² 5p⁴', density: '6.24', melt: '449.51', boil: '988', discovered: '1782'},
+      {number: 53, symbol: 'I', name: 'Iodine', mass: '126.90', category: 'nonmetal', group: 17, period: 5, electron: '[Kr] 4d¹⁰ 5s² 5p⁵', density: '4.933', melt: '113.7', boil: '184.4', discovered: '1811'},
+      {number: 54, symbol: 'Xe', name: 'Xenon', mass: '131.29', category: 'noble-gas', group: 18, period: 5, electron: '[Kr] 4d¹⁰ 5s² 5p⁶', density: '5.894', melt: '-111.75', boil: '-108.04', discovered: '1898'},
+      {number: 55, symbol: 'Cs', name: 'Caeium', mass: '132.91', category: 'alkali', group: 1, period: 6, electron: '[Xe] 6s¹', density: '1.873', melt: '28.44', boil: '671', discovered: '1860'},
+      {number: 56, symbol: 'Ba', name: 'Barium', mass: '137.33', category: 'alkaline', group: 2, period: 6, electron: '[Xe] 6s²', density: '3.51', melt: '727', boil: '1845', discovered: '1808'},
+      {number: 57, symbol: 'La', name: 'Lanthanum', mass: '138.91', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 5d¹ 6s²', density: '6.162', melt: '920', boil: '3464', discovered: '1839'},
+      {number: 58, symbol: 'Ce', name: 'Cerium', mass: '140.12', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f¹ 5d¹ 6s²', density: '6.770', melt: '798', boil: '3443', discovered: '1803'},
+      {number: 59, symbol: 'Pr', name: 'Praseodymium', mass: '140.91', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f³ 6s²', density: '6.77', melt: '931', boil: '3520', discovered: '1885'},
+      {number: 60, symbol: 'Nd', name: 'Neodimium', mass: '144.24', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f⁴ 6s²', density: '7.01', melt: '1016', boil: '3074', discovered: '1885'},
+      {number: 61, symbol: 'Pm', name: 'Promethium', mass: '[145]', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f⁵ 6s²', density: '7.26', melt: '1042', boil: '3000', discovered: '1945'},
+      {number: 62, symbol: 'Sm', name: 'Samarium', mass: '150.36', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f⁶ 6s²', density: '7.52', melt: '1072', boil: '1794', discovered: '1879'},
+      {number: 63, symbol: 'Eu', name: 'Europium', mass: '151.96', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f⁷ 6s²', density: '5.264', melt: '822', boil: '1596', discovered: '1901'},
+      {number: 64, symbol: 'Gd', name: 'Gadolinium', mass: '157.25', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f⁷ 5d¹ 6s²', density: '7.90', melt: '1313', boil: '3273', discovered: '1880'},
+      {number: 65, symbol: 'Tb', name: 'Terbium', mass: '158.93', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f⁹ 6s²', density: '8.23', melt: '1356', boil: '3230', discovered: '1843'},
+      {number: 66, symbol: 'Dy', name: 'Dysprosium', mass: '162.50', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f¹⁰ 6s²', density: '8.540', melt: '1412', boil: '2567', discovered: '1886'},
+      {number: 67, symbol: 'Ho', name: 'Holmium', mass: '164.93', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f¹¹ 6s²', density: '8.79', melt: '1474', boil: '2700', discovered: '1878'},
+      {number: 68, symbol: 'Er', name: 'Erbium', mass: '167.26', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f¹² 6s²', density: '9.066', melt: '1529', boil: '2868', discovered: '1843'},
+      {number: 69, symbol: 'Tm', name: 'Thulium', mass: '168.93', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f¹³ 6s²', density: '9.32', melt: '1545', boil: '1950', discovered: '1879'},
+      {number: 70, symbol: 'Yb', name: 'Ytterbium', mass: '173.05', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f¹⁴ 6s²', density: '6.90', melt: '824', boil: '1196', discovered: '1878'},
+      {number: 71, symbol: 'Lu', name: 'Lutetium', mass: '174.97', category: 'lanthanide', group: 3, period: 6, electron: '[Xe] 4f¹⁴ 5d¹ 6s²', density: '9.841', melt: '1663', boil: '3402', discovered: '1907'},
+      {number: 72, symbol: 'Hf', name: 'Hafnium', mass: '178.49', category: 'transition', group: 4, period: 6, electron: '[Xe] 4f¹⁴ 5d² 6s²', density: '13.31', melt: '2233', boil: '4603', discovered: '1922'},
+      {number: 73, symbol: 'Ta', name: 'Tantalum', mass: '180.95', category: 'transition', group: 5, period: 6, electron: '[Xe] 4f¹⁴ 5d³ 6s²', density: '16.65', melt: '3017', boil: '5458', discovered: '1802'},
+      {number: 74, symbol: 'W', name: 'Tungsten', mass: '183.84', category: 'transition', group: 6, period: 6, electron: '[Xe] 4f¹⁴ 5d⁴ 6s²', density: '19.25', melt: '3422', boil: '5555', discovered: '1783'},
+      {number: 75, symbol: 'Re', name: 'Rhenium', mass: '186.21', category: 'transition', group: 7, period: 6, electron: '[Xe] 4f¹⁴ 5d⁵ 6s²', density: '21.02', melt: '3186', boil: '5596', discovered: '1925'},
+      {number: 76, symbol: 'Os', name: 'Osimium', mass: '190.23', category: 'transition', group: 8, period: 6, electron: '[Xe] 4f¹⁴ 5d⁶ 6s²', density: '22.59', melt: '3033', boil: '5012', discovered: '1803'},
+      {number: 77, symbol: 'Ir', name: 'Iridium', mass: '192.22', category: 'transition', group: 9, period: 6, electron: '[Xe] 4f¹⁴ 5d⁷ 6s²', density: '22.56', melt: '2466', boil: '4428', discovered: '1803'},
+      {number: 78, symbol: 'Pt', name: 'Platium', mass: '195.08', category: 'transition', group: 10, period: 6, electron: '[Xe] 4f¹⁴ 5d⁹ 6s¹', density: '21.45', melt: '1768.3', boil: '3825', discovered: '1735'},
+      {number: 79, symbol: 'Au', name: 'Gold', mass: '196.97', category: 'transition', group: 11, period: 6, electron: '[Xe] 4f¹⁴ 5d¹⁰ 6s¹', density: '19.30', melt: '1064.18', boil: '2856', discovered: 'Cổ đại'},
+      {number: 80, symbol: 'Hg', name: 'Mercury', mass: '200.59', category: 'transition', group: 12, period: 6, electron: '[Xe] 4f¹⁴ 5d¹⁰ 6s²', density: '13.534', melt: '-38.83', boil: '356.73', discovered: 'Cổ đại'},
+      {number: 81, symbol: 'Tl', name: 'Thallium', mass: '204.38', category: 'post-transition', group: 13, period: 6, electron: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹', density: '11.85', melt: '304', boil: '1473', discovered: '1861'},
+      {number: 82, symbol: 'Pb', name: 'Lead', mass: '207.2', category: 'post-transition', group: 14, period: 6, electron: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²', density: '11.34', melt: '327.46', boil: '1749', discovered: 'Cổ đại'},
+      {number: 83, symbol: 'Bi', name: 'Bismut', mass: '208.98', category: 'post-transition', group: 15, period: 6, electron: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p³', density: '9.78', melt: '271.4', boil: '1564', discovered: 'Cổ đại'},
+      {number: 84, symbol: 'Po', name: 'Polonium', mass: '[209]', category: 'post-transition', group: 16, period: 6, electron: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴', density: '9.196', melt: '254', boil: '962', discovered: '1898'},
+      {number: 85, symbol: 'At', name: 'Astatine', mass: '[210]', category: 'metalloid', group: 17, period: 6, electron: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵', density: '7', melt: '302', boil: '337', discovered: '1940'},
+      {number: 86, symbol: 'Rn', name: 'Radon', mass: '[222]', category: 'noble-gas', group: 18, period: 6, electron: '[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶', density: '9.73', melt: '-71', boil: '-61.7', discovered: '1900'},
+      {number: 87, symbol: 'Fr', name: 'Francium', mass: '[223]', category: 'alkali', group: 1, period: 7, electron: '[Rn] 7s¹', density: '1.87', melt: '27', boil: '677', discovered: '1939'},
+      {number: 88, symbol: 'Ra', name: 'Radium', mass: '[226]', category: 'alkaline', group: 2, period: 7, electron: '[Rn] 7s²', density: '5.5', melt: '700', boil: '1737', discovered: '1898'},
+      {number: 89, symbol: 'Ac', name: 'Actinium', mass: '[227]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 6d¹ 7s²', density: '10.07', melt: '1050', boil: '3198', discovered: '1899'},
+      {number: 90, symbol: 'Th', name: 'Thorium', mass: '232.04', category: 'actinide', group: 3, period: 7, electron: '[Rn] 6d² 7s²', density: '11.724', melt: '1750', boil: '4788', discovered: '1829'},
+      {number: 91, symbol: 'Pa', name: 'Protactinium', mass: '231.04', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f² 6d¹ 7s²', density: '15.37', melt: '1572', boil: '4000', discovered: '1913'},
+      {number: 92, symbol: 'U', name: 'Uranium', mass: '238.03', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f³ 6d¹ 7s²', density: '19.05', melt: '1135', boil: '4131', discovered: '1789'},
+      {number: 93, symbol: 'Np', name: 'Neptunium', mass: '[237]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f⁴ 6d¹ 7s²', density: '20.45', melt: '644', boil: '3902', discovered: '1940'},
+      {number: 94, symbol: 'Pu', name: 'Plutonium', mass: '[244]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f⁶ 7s²', density: '19.816', melt: '640', boil: '3228', discovered: '1940'},
+      {number: 95, symbol: 'Am', name: 'Americium', mass: '[243]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f⁷ 7s²', density: '13.69', melt: '1176', boil: '2011', discovered: '1944'},
+      {number: 96, symbol: 'Cm', name: 'Curium', mass: '[247]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f⁷ 6d¹ 7s²', density: '13.51', melt: '1345', boil: '3110', discovered: '1944'},
+      {number: 97, symbol: 'Bk', name: 'Berkelium', mass: '[247]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f⁹ 7s²', density: '14.79', melt: '1050', boil: '2627', discovered: '1949'},
+      {number: 98, symbol: 'Cf', name: 'Californium', mass: '[251]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f¹⁰ 7s²', density: '15.1', melt: '900', boil: '1743', discovered: '1950'},
+      {number: 99, symbol: 'Es', name: 'Einsteinium', mass: '[252]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f¹¹ 7s²', density: '8.84', melt: '860', boil: '1130', discovered: '1952'},
+      {number: 100, symbol: 'Fm', name: 'Fermium', mass: '[257]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f¹² 7s²', density: '9.7', melt: '1527', boil: 'N/A', discovered: '1952'},
+      {number: 101, symbol: 'Md', name: 'Mendelevium', mass: '[258]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f¹³ 7s²', density: '10.3', melt: '827', boil: 'N/A', discovered: '1955'},
+      {number: 102, symbol: 'No', name: 'Nobelium', mass: '[259]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f¹⁴ 7s²', density: '9.9', melt: '827', boil: 'N/A', discovered: '1958'},
+      {number: 103, symbol: 'Lr', name: 'Lawrencium', mass: '[266]', category: 'actinide', group: 3, period: 7, electron: '[Rn] 5f¹⁴ 7s² 7p¹', density: '15.6', melt: '1627', boil: 'N/A', discovered: '1961'},
+      {number: 104, symbol: 'Rf', name: 'Rutherfordium', mass: '[267]', category: 'transition', group: 4, period: 7, electron: '[Rn] 5f¹⁴ 6d² 7s²', density: '23.2', melt: '2100', boil: '5500', discovered: '1964'},
+      {number: 105, symbol: 'Db', name: 'Dubnium', mass: '[268]', category: 'transition', group: 5, period: 7, electron: '[Rn] 5f¹⁴ 6d³ 7s²', density: '29.3', melt: 'N/A', boil: 'N/A', discovered: '1967'},
+      {number: 106, symbol: 'Sg', name: 'Seaborgium', mass: '[269]', category: 'transition', group: 6, period: 7, electron: '[Rn] 5f¹⁴ 6d⁴ 7s²', density: '35', melt: 'N/A', boil: 'N/A', discovered: '1974'},
+      {number: 107, symbol: 'Bh', name: 'Bohrium', mass: '[270]', category: 'transition', group: 7, period: 7, electron: '[Rn] 5f¹⁴ 6d⁵ 7s²', density: '37', melt: 'N/A', boil: 'N/A', discovered: '1981'},
+      {number: 108, symbol: 'Hs', name: 'Hassium', mass: '[277]', category: 'transition', group: 8, period: 7, electron: '[Rn] 5f¹⁴ 6d⁶ 7s²', density: '41', melt: 'N/A', boil: 'N/A', discovered: '1984'},
+      {number: 109, symbol: 'Mt', name: 'Meitnerium', mass: '[278]', category: 'transition', group: 9, period: 7, electron: '[Rn] 5f¹⁴ 6d⁷ 7s²', density: '37.4', melt: 'N/A', boil: 'N/A', discovered: '1982'},
+      {number: 110, symbol: 'Ds', name: 'Darmstadtium', mass: '[281]', category: 'transition', group: 10, period: 7, electron: '[Rn] 5f¹⁴ 6d⁹ 7s¹', density: '34.8', melt: 'N/A', boil: 'N/A', discovered: '1994'},
+      {number: 111, symbol: 'Rg', name: 'Roentgenium', mass: '[282]', category: 'transition', group: 11, period: 7, electron: '[Rn] 5f¹⁴ 6d¹⁰ 7s¹', density: '28.7', melt: 'N/A', boil: 'N/A', discovered: '1994'},
+      {number: 112, symbol: 'Cn', name: 'Copernicium', mass: '[285]', category: 'transition', group: 12, period: 7, electron: '[Rn] 5f¹⁴ 6d¹⁰ 7s²', density: '23.7', melt: 'N/A', boil: 'N/A', discovered: '1996'},
+      {number: 113, symbol: 'Nh', name: 'Nihonium', mass: '[286]', category: 'post-transition', group: 13, period: 7, electron: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p¹', density: '16', melt: 'N/A', boil: 'N/A', discovered: '2003'},
+      {number: 114, symbol: 'Fl', name: 'Flerovium', mass: '[289]', category: 'post-transition', group: 14, period: 7, electron: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p²', density: '14', melt: 'N/A', boil: 'N/A', discovered: '1998'},
+      {number: 115, symbol: 'Mc', name: 'Moscovium', mass: '[290]', category: 'post-transition', group: 15, period: 7, electron: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p³', density: '13.5', melt: 'N/A', boil: 'N/A', discovered: '2003'},
+      {number: 116, symbol: 'Lv', name: 'Livermorium', mass: '[293]', category: 'post-transition', group: 16, period: 7, electron: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁴', density: '12.9', melt: 'N/A', boil: 'N/A', discovered: '2000'},
+      {number: 117, symbol: 'Ts', name: 'Tenessine', mass: '[294]', category: 'metalloid', group: 17, period: 7, electron: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁵', density: '7.2', melt: 'N/A', boil: 'N/A', discovered: '2010'},
+      {number: 118, symbol: 'Og', name: 'Oganesson', mass: '[294]', category: 'noble-gas', group: 18, period: 7, electron: '[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁶', density: '5', melt: 'N/A', boil: 'N/A', discovered: '2002'}
+    ];
+
+    function createPeriodicTable() {
+      const table = document.getElementById('periodic-table');
+      table.innerHTML = '';
+      
+      // Tạo 7 period chính
+      for (let period = 1; period <= 7; period++) {
+        for (let group = 1; group <= 18; group++) {
+          const element = elements.find(e => e.period === period && e.group === group);
+          
+          // Thêm placeholder cho Lanthanide và Actinide
+          if (period === 6 && group === 3) {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'element series-placeholder';
+            placeholder.style.gridRow = period;
+            placeholder.textContent = '57-71';
+            table.appendChild(placeholder);
+            continue;
+          }
+          
+          if (period === 7 && group === 3) {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'element series-placeholder';
+            placeholder.style.gridRow = period;
+            placeholder.textContent = '89-103';
+            table.appendChild(placeholder);
+            continue;
+          }
+          
+          if (element) {
+            const div = document.createElement('div');
+            div.className = `element ${element.category}`;
+            div.style.gridRow = period;
+            div.innerHTML = `
+              <div class="atomic-number">${element.number}</div>
+              <div class="symbol">${element.symbol}</div>
+              <div class="name">${element.name}</div>
+            `;
+            div.addEventListener('click', () => showModal(element));
+            table.appendChild(div);
+          } else {
+            const empty = document.createElement('div');
+            empty.className = 'element empty';
+            empty.style.gridRow = period;
+            table.appendChild(empty);
+          }
+        }
+      }
+      
+      // Tạo hàng Lanthanide (hàng 9, từ số 57-71)
+      const lanthanides = elements.filter(e => e.number >= 57 && e.number <= 71);
+      lanthanides.forEach((element, index) => {
+        const div = document.createElement('div');
+        div.className = `element ${element.category}`;
+        div.style.gridRow = 9;
+        div.style.gridColumn = index + 4; // Bắt đầu từ cột 4
+        div.innerHTML = `
+          <div class="atomic-number">${element.number}</div>
+          <div class="symbol">${element.symbol}</div>
+          <div class="name">${element.name}</div>
+        `;
+        div.addEventListener('click', () => showModal(element));
+        table.appendChild(div);
+      });
+      
+      // Tạo hàng Actinide (hàng 10, từ số 89-103)
+      const actinides = elements.filter(e => e.number >= 89 && e.number <= 103);
+      actinides.forEach((element, index) => {
+        const div = document.createElement('div');
+        div.className = `element ${element.category}`;
+        div.style.gridRow = 10;
+        div.style.gridColumn = index + 4; // Bắt đầu từ cột 4
+        div.innerHTML = `
+          <div class="atomic-number">${element.number}</div>
+          <div class="symbol">${element.symbol}</div>
+          <div class="name">${element.name}</div>
+        `;
+        div.addEventListener('click', () => showModal(element));
+        table.appendChild(div);
+      });
+      
+      // Thêm label cho Lanthanide
+      const lanthanideLabel = document.createElement('div');
+      lanthanideLabel.className = 'series-label';
+      lanthanideLabel.textContent = 'Lanthanides';
+      lanthanideLabel.style.gridRow = 9;
+      lanthanideLabel.style.gridColumn = '1 / 4';
+      table.appendChild(lanthanideLabel);
+      
+      // Thêm label cho Actinide
+      const actinideLabel = document.createElement('div');
+      actinideLabel.className = 'series-label';
+      actinideLabel.textContent = 'Actinides';
+      actinideLabel.style.gridRow = 10;
+      actinideLabel.style.gridColumn = '1 / 4';
+      table.appendChild(actinideLabel);
+    }
+
+    function showModal(element) {
+      const modal = document.getElementById('modal');
+      document.getElementById('modal-symbol').textContent = element.symbol;
+      document.getElementById('modal-name').textContent = element.name;
+      document.getElementById('modal-atomic').textContent = `Số hiệu nguyên tử: ${element.number}`;
+      
+      const infoGrid = document.getElementById('info-grid');
+      infoGrid.innerHTML = `
+        <div class="info-item">
+          <div class="info-label">Khối lượng nguyên tử</div>
+          <div class="info-value">${element.mass}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Cấu hình electron</div>
+          <div class="info-value">${element.electron}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Nhóm</div>
+          <div class="info-value">${element.group}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Chu kỳ</div>
+          <div class="info-value">${element.period}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Khối lượng riêng (g/cm³)</div>
+          <div class="info-value">${element.density}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Nhiệt độ nóng chảy (°C)</div>
+          <div class="info-value">${element.melt || 'N/A'}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Nhiệt độ sôi (°C)</div>
+          <div class="info-value">${element.boil || 'N/A'}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Phân loại</div>
+          <div class="info-value">${getCategoryName(element.category)}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Năm phát hiện</div>
+          <div class="info-value">${element.discovered}</div>
+        </div>
+      `;
+      
+      modal.classList.add('active');
+    }
+
+    function getCategoryName(category) {
+      const names = {
+        'nonmetal': 'Phi kim',
+        'noble-gas': 'Khí hiếm',
+        'alkali': 'Kim loại kiềm',
+        'alkaline': 'Kim loại kiềm thổ',
+        'transition': 'Kim loại chuyển tiếp',
+        'post-transition': 'Kim loại sau chuyển tiếp',
+        'metalloid': 'Á kim',
+        'lanthanide': 'Lanthanide',
+        'actinide': 'Actinide'
+      };
+      return names[category] || category;
+    }
+
+    document.getElementById('close-btn').addEventListener('click', () => {
+      document.getElementById('modal').classList.remove('active');
+    });
+
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target.id === 'modal') {
+        document.getElementById('modal').classList.remove('active');
+      }
+    });
+
+    async function onConfigChange(config) {
+      const titleElement = document.getElementById('main-title');
+      const subtitleElement = document.getElementById('subtitle');
+      
+      if (titleElement) {
+        titleElement.textContent = config.main_title || defaultConfig.main_title;
+      }
+      
+      if (subtitleElement) {
+        subtitleElement.textContent = config.subtitle || defaultConfig.subtitle;
+      }
+
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      
+      document.body.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+      
+      const modalContent = document.querySelector('.modal-content');
+      if (modalContent) {
+        modalContent.style.background = backgroundColor;
+      }
+      
+      const modalSymbol = document.getElementById('modal-symbol');
+      if (modalSymbol) {
+        modalSymbol.style.color = primaryColor;
+      }
+      
+      const modalHeader = document.querySelector('.modal-header');
+      if (modalHeader) {
+        modalHeader.style.borderBottomColor = primaryColor;
+      }
+      
+      const closeBtn = document.getElementById('close-btn');
+      if (closeBtn) {
+        closeBtn.style.background = primaryColor;
+      }
+      
+      const infoItems = document.querySelectorAll('.info-item');
+      infoItems.forEach(item => {
+        item.style.borderLeftColor = primaryColor;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                config.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            },
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                config.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['main_title', config.main_title || defaultConfig.main_title],
+          ['subtitle', config.subtitle || defaultConfig.subtitle]
+        ])
+      });
+    }
+
+    createPeriodicTable();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a5a7bf960e2ab59',t:'MTc2NDMzOTM5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
